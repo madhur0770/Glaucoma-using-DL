@@ -1,0 +1,17 @@
+# Training / research pipeline (GPU recommended). The browser demo and app/screen.py need none of this.
+torch>=2.1
+torchvision
+timm
+segmentation-models-pytorch
+albumentations
+opencv-python
+numpy
+pandas
+scikit-learn
+scipy
+scikit-image
+tqdm
+matplotlib
+openpyxl
+onnx
+onnxruntime

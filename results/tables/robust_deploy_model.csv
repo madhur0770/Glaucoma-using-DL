@@ -1,0 +1,2 @@
+temperature,test_auc,test_ece_fusion,test_ece_cnn_raw,test_ece_cnn_temperature,threshold_youden_val,sens,spec,features
+1.25,0.8590079365079366,0.04637496850341938,0.0959659680687888,0.08989006403262598,0.16572295159960498,0.76,0.7886904761904762,"['cnn_logit', 'vcdr_e2e', 'rim_I', 'rim_S', 'rim_N', 'rim_T', 'rim_min']"

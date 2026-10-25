@@ -1,0 +1,156 @@
+[
+ {
+  "file": "01.jpg",
+  "dataset": "Ch\u00e1k\u1e63u",
+  "reference": "glaucoma suspect (graders)",
+  "expert_vcdr": 0.674,
+  "note": "held-out TEST image (never used for training)"
+ },
+ {
+  "file": "01__blur.jpg",
+  "dataset": "Ch\u00e1k\u1e63u",
+  "reference": "glaucoma suspect (graders)",
+  "expert_vcdr": 0.674,
+  "note": "degraded copy (blur) of photo 01 - expect a quality warning and/or a less reliable result"
+ },
+ {
+  "file": "01__dark.jpg",
+  "dataset": "Ch\u00e1k\u1e63u",
+  "reference": "glaucoma suspect (graders)",
+  "expert_vcdr": 0.674,
+  "note": "degraded copy (dark) of photo 01 - expect a quality warning and/or a less reliable result"
+ },
+ {
+  "file": "01__jpeg.jpg",
+  "dataset": "Ch\u00e1k\u1e63u",
+  "reference": "glaucoma suspect (graders)",
+  "expert_vcdr": 0.674,
+  "note": "degraded copy (jpeg) of photo 01 - expect a quality warning and/or a less reliable result"
+ },
+ {
+  "file": "02.jpg",
+  "dataset": "Ch\u00e1k\u1e63u",
+  "reference": "glaucoma suspect (graders)",
+  "expert_vcdr": 0.659,
+  "note": "held-out TEST image (never used for training)"
+ },
+ {
+  "file": "03.jpg",
+  "dataset": "Ch\u00e1k\u1e63u",
+  "reference": "normal (graders)",
+  "expert_vcdr": 0.544,
+  "note": "held-out TEST image (never used for training)"
+ },
+ {
+  "file": "04.jpg",
+  "dataset": "Ch\u00e1k\u1e63u",
+  "reference": "normal (graders)",
+  "expert_vcdr": 0.594,
+  "note": "held-out TEST image (never used for training)"
+ },
+ {
+  "file": "05.jpg",
+  "dataset": "PAPILA",
+  "reference": "glaucoma (clinical)",
+  "expert_vcdr": 0.772,
+  "note": "held-out TEST image (never used for training)"
+ },
+ {
+  "file": "06.jpg",
+  "dataset": "PAPILA",
+  "reference": "glaucoma (clinical)",
+  "expert_vcdr": 0.516,
+  "note": "held-out TEST image (never used for training)"
+ },
+ {
+  "file": "07.jpg",
+  "dataset": "PAPILA",
+  "reference": "healthy (clinical)",
+  "expert_vcdr": 0.574,
+  "note": "held-out TEST image (never used for training)"
+ },
+ {
+  "file": "08.jpg",
+  "dataset": "PAPILA",
+  "reference": "healthy (clinical)",
+  "expert_vcdr": 0.139,
+  "note": "held-out TEST image (never used for training)"
+ },
+ {
+  "file": "08__dark.jpg",
+  "dataset": "PAPILA",
+  "reference": "healthy (clinical)",
+  "expert_vcdr": 0.139,
+  "note": "degraded copy (dark) of photo 08 - expect a quality warning and/or a less reliable result"
+ },
+ {
+  "file": "09.jpg",
+  "dataset": "RIGA-BinRushed",
+  "reference": "paper rule: glaucoma (area CDR > 0.25)",
+  "expert_vcdr": 0.639,
+  "note": "held-out TEST image (never used for training)"
+ },
+ {
+  "file": "09__blur.jpg",
+  "dataset": "RIGA-BinRushed",
+  "reference": "paper rule: glaucoma (area CDR > 0.25)",
+  "expert_vcdr": 0.639,
+  "note": "degraded copy (blur) of photo 09 - expect a quality warning and/or a less reliable result"
+ },
+ {
+  "file": "10.jpg",
+  "dataset": "RIGA-BinRushed",
+  "reference": "paper rule: glaucoma (area CDR > 0.25)",
+  "expert_vcdr": 0.506,
+  "note": "held-out TEST image (never used for training)"
+ },
+ {
+  "file": "11.jpg",
+  "dataset": "RIGA-BinRushed",
+  "reference": "paper rule: normal (area CDR <= 0.25)",
+  "expert_vcdr": 0.423,
+  "note": "held-out TEST image (never used for training)"
+ },
+ {
+  "file": "12.jpg",
+  "dataset": "RIGA-BinRushed",
+  "reference": "paper rule: normal (area CDR <= 0.25)",
+  "expert_vcdr": 0.443,
+  "note": "held-out TEST image (never used for training)"
+ },
+ {
+  "file": "13.jpg",
+  "dataset": "RIGA-MESSIDOR",
+  "reference": "paper rule: glaucoma (area CDR > 0.25)",
+  "expert_vcdr": 0.492,
+  "note": "held-out TEST image (never used for training)"
+ },
+ {
+  "file": "14.jpg",
+  "dataset": "RIGA-MESSIDOR",
+  "reference": "paper rule: normal (area CDR <= 0.25)",
+  "expert_vcdr": 0.346,
+  "note": "held-out TEST image (never used for training)"
+ },
+ {
+  "file": "15.jpg",
+  "dataset": "RIGA-Magrabia",
+  "reference": "paper rule: glaucoma (area CDR > 0.25)",
+  "expert_vcdr": 0.541,
+  "note": "held-out TEST image (never used for training)"
+ },
+ {
+  "file": "16.jpg",
+  "dataset": "RIGA-Magrabia",
+  "reference": "paper rule: normal (area CDR <= 0.25)",
+  "expert_vcdr": 0.358,
+  "note": "held-out TEST image (never used for training)"
+ },
+ {
+  "file": "99_not_a_fundus_photo.jpg",
+  "dataset": "synthetic",
+  "reference": "not a retina",
+  "expert_vcdr": null,
+  "note": "the tool should say the optic disc was not found"
+ }
+]

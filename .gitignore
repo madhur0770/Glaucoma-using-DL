@@ -1,0 +1,10 @@
+data/
+raw/
+processed/
+models/*.pt
+predict_in/
+predict_out/
+__pycache__/
+*.pyc
+*_result.json
+.venv/

@@ -1,0 +1,24 @@
+area,metric,reference,reference_value,reference_data,ours,our_data,status
+Base paper - own protocol (fixed 39-image split),accuracy,Kumar & Kumar 2022 (results section),0.9487,"GLAUCOMA-PY + BinRushed, 39 test",0.9487179487179487,BinRushed 39 test (P2 Paper rule automated),TIED
+Base paper - own protocol (fixed 39-image split),sensitivity,Kumar & Kumar 2022 (results section),1.0,"GLAUCOMA-PY + BinRushed, 39 test",0.9230769230769231,BinRushed 39 test (P2 Paper rule automated),BEHIND
+Base paper - own protocol (fixed 39-image split),specificity,Kumar & Kumar 2022 (results section),0.882,"GLAUCOMA-PY + BinRushed, 39 test",0.9615384615384616,BinRushed 39 test (P2 Paper rule automated),AHEAD
+Base paper - own protocol (fixed 39-image split),train_accuracy,Kumar & Kumar 2022 (results section),0.973,"GLAUCOMA-PY + BinRushed, 39 test",0.9219858156028369,BinRushed 39 test (P2 Paper rule automated),BEHIND
+Base paper - own protocol (fixed 39-image split),accuracy as quoted in the abstract / Table 4,Kumar & Kumar 2022 (abstract),0.973,GLAUCOMA-PY + BinRushed,0.9487179487179487,BinRushed 39 test (P2 Paper rule automated),BEHIND
+Base paper - own protocol (mean of 500 random 141/39 splits),accuracy,Kumar & Kumar 2022 (single split),0.9487,BinRushed 39 test,0.9316410256410257,"BinRushed, 500 splits (P2 Paper rule automated)",BEHIND
+"Base paper - own protocol, screening mode (mean of 500 splits)",sensitivity,Kumar & Kumar 2022 (single split),1.0,BinRushed 39 test,0.9656318681318683,"BinRushed, 500 splits (P9 screening threshold)",BEHIND
+"Base paper - own protocol, screening mode (mean of 500 splits)",specificity,Kumar & Kumar 2022 (single split),0.882,BinRushed 39 test,0.7984445584045584,"BinRushed, 500 splits (P9 screening threshold)",BEHIND
+"Base paper - own protocol, screening mode (mean of 500 splits)",accuracy,Kumar & Kumar 2022 (single split),0.9487,BinRushed 39 test,0.8543076923076923,"BinRushed, 500 splits (P9 screening threshold)",BEHIND
+Reproduction check (not a contest),"accuracy of the paper's own method, re-implemented by us",Kumar & Kumar 2022 (reported),0.9487,BinRushed,0.5692307692307693,"BinRushed, 500 splits",does not reproduce
+Base paper - pipeline steps,OD localisation hit rate,paper method re-implemented,0.9195402298850575,522 test,1.0,"same 522 test images; DL Dice end-to-end, full resolution",AHEAD
+Base paper - pipeline steps,disc Dice,paper method re-implemented,0.7714997416549072,522 test,0.9783334330419171,"same 522 test images; DL Dice end-to-end, full resolution",AHEAD
+Base paper - pipeline steps,cup Dice,paper method re-implemented,0.44782289408840253,522 test,0.9041115938737116,"same 522 test images; DL Dice end-to-end, full resolution",AHEAD
+Base paper - pipeline steps,vCDR MAE,paper method re-implemented,0.17790491255786914,522 test,0.03139862880856987,522 test,AHEAD
+Glaucoma detection (real labels),AUC,paper method re-implemented (M0),0.6023412698412699,Chaksu+PAPILA 411 test,0.8770238095238095,"Chaksu+PAPILA 411 test (M7, our pre-defined final model)",AHEAD
+Literature - segmentation,cup Dice,"Wang, Kim, Eom 2025 (Drishti-GS)",0.9127,Drishti-GS,0.9041115938737116,"Chaksu/PAPILA/RIGA test (end-to-end, full resolution)",BEHIND
+Literature - segmentation,cup Dice,"Wang, Kim, Eom 2025 (REFUGE)",0.9014,REFUGE,0.9041115938737116,"Chaksu/PAPILA/RIGA test (end-to-end, full resolution)",TIED
+Literature - segmentation,mean Dice (disc+cup),"Zhao, Mookiah, Trucco 2025 (internal test)",0.9051,GoDARTS/IDRiD/Drishti/RIM-ONE/REFUGE,0.9412225134578144,"Chaksu/PAPILA/RIGA test (end-to-end, full resolution)",AHEAD
+Literature - segmentation,IoU (theirs: overall multi-label OD/OC/vessels/PPA; ours: mean of disc and cup),Kako et al. 2024,0.87,HRF (45 images),0.8958334966923859,"Chaksu/PAPILA/RIGA test (end-to-end, full resolution)",AHEAD
+Literature - CDR,vCDR MAE,Lv et al. 2025,0.0387,Drishti-GS/REFUGE,0.03139862880856987,Chaksu/PAPILA/RIGA test,AHEAD
+Literature - CDR,vCDR correlation r,Lv et al. 2025,0.919,Drishti-GS/REFUGE,0.9128048648519137,Chaksu/PAPILA/RIGA test,BEHIND
+Literature - PPA,PPA Dice,Li et al. 2023 (semi-supervised),0.815,Beijing Tongren 150+407,0.8490125017793139,PALM test 384,AHEAD
+Literature - detection,sensitivity at specificity 0.821,Chung et al. 2026,0.903,"NTUH: trained on 43,152, tested on 749",0.76,Chaksu+PAPILA 411 test (M7 Fusion),BEHIND

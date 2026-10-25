@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glaucoma Screening Demo</title>
+<script src="coi-serviceworker.js"></script>
+<meta name="description" content="Fully automatic glaucoma screening from a fundus photograph: optic disc and cup segmentation, cup-to-disc ratio, parapapillary atrophy and a calibrated glaucoma probability - running entirely in your browser.">
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--ink:#16202b;--mute:#5b6673;--line:#e1e5ea;--acc:#2a78d6;--bad:#b3261e;--good:#1e7a3c;--warn:#9a5b00;--hero:#10233c}
+*{box-sizing:border-box}html,body{margin:0}body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+a{color:var(--acc)}
+.hero{background:var(--hero);color:#fff;padding:34px 20px 28px}.wrap{max-width:1160px;margin:0 auto;padding:0 16px}
+.hero h1{margin:0;font-size:30px;letter-spacing:-.01em}.hero p{margin:8px 0 0;color:#c8d4e4;max-width:820px}
+.kpis{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.kpi{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:10px 14px;min-width:150px}
+.kpi b{display:block;font-size:20px}.kpi span{font-size:12.5px;color:#c8d4e4}
+.links{margin-top:16px;font-size:14px}.links a{color:#9cc3ff;margin-right:18px}
+main{padding:22px 0 10px}section{margin-bottom:26px}h2{font-size:19px;margin:0 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.samples{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px;margin-top:10px}
+.samples button{border:2px solid transparent;border-radius:8px;padding:0;background:#000;cursor:pointer;overflow:hidden;position:relative}
+.samples button:hover,.samples button:focus-visible{border-color:var(--acc);outline:none}
+.samples img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;opacity:.95}
+.samples small{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.62);color:#fff;font-size:11px;padding:2px 4px;text-align:left}
+#drop{display:block;border:2px dashed #9fb0c6;border-radius:12px;background:var(--card);padding:22px;text-align:center;cursor:pointer;margin-top:12px}
+#drop.hover{border-color:var(--acc);background:#eef3fd}#drop b{color:var(--acc)}
+#loader{margin-top:12px}.bar{height:10px;border-radius:5px;background:#e3e8ee;overflow:hidden}.bar>div{height:100%;width:0;background:var(--acc);transition:width .2s}
+#loadlabel,#status{font-size:13px;color:var(--mute);margin-top:6px}
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.step{flex:1;min-width:150px;background:#eaedf1;border-radius:8px;padding:7px 10px;font-size:13px;color:var(--mute)}
+.step.done{background:#e1f0e5;color:var(--good)}.step.run{background:#e4ecfb;color:var(--acc)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.card h3{margin:0 0 10px;font-size:13px;color:var(--mute);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.card img{max-width:100%;border-radius:8px;display:block}
+#verdict{font-size:23px;font-weight:700;margin:0}#prob{color:var(--mute);margin-top:2px}
+.pbar{height:12px;border-radius:6px;background:#e3e8ee;overflow:hidden;margin:10px 0 4px;position:relative}.pbar>div{height:100%}
+.pbar i{position:absolute;top:-3px;bottom:-3px;width:2px;background:#16202b}
+table{width:100%;border-collapse:collapse;font-size:14px}td{padding:6px 4px;border-bottom:1px solid var(--line)}td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.legend{font-size:13px;margin-top:8px;color:var(--mute)}.legend span{display:inline-block;width:11px;height:11px;border-radius:2px;margin:0 4px 0 10px;vertical-align:-1px}
+.warn{color:var(--warn)}.muted{color:var(--mute);font-size:13px}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.how div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:13.5px}
+.how b{display:block;margin-bottom:4px}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}.figs figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px}
+.figs img{width:100%}.figs figcaption{font-size:13px;color:var(--mute);margin-top:6px}
+footer{color:var(--mute);font-size:12.5px;text-align:center;padding:18px 16px 30px}
+@media(max-width:820px){.grid{grid-template-columns:1fr}.hero h1{font-size:24px}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+<h1>Automatic glaucoma screening from a fundus photograph</h1>
+<p>Deep learning finds the optic disc, outlines disc, cup and parapapillary atrophy, measures the cup-to-disc ratio and the neuroretinal rim, and returns a calibrated glaucoma probability with a heat map and an image-quality check. The models run <b>entirely in your browser</b>; your photo is never uploaded.</p>
+<div class="kpis">
+<div class="kpi"><b>0.978 / 0.904</b><span>disc / cup Dice, 522 test photos</span></div>
+<div class="kpi"><b>0.031</b><span>vertical CDR error (classical: 0.178)</span></div>
+<div class="kpi"><b>0.877</b><span>AUC on clinical diagnoses (classical: 0.602)</span></div>
+<div class="kpi"><b>92.7%</b><span>vs best of 6 ophthalmologists 91.1%</span></div>
+</div>
+<div class="links"><a href="https://github.com/madhur0770/Glaucoma-using-DL">Source code and results</a><a href="#how">How it works</a><a href="#results">Key results</a></div>
+</div></header>
+<main class="wrap">
+<section>
+<h2>Try it</h2>
+<div class="card">
+<div class="muted">Pick a held-out test photo (never used for training) or drop your own fundus photograph. The first run downloads the models (about 190 MB, cached afterwards).</div>
+<div class="samples" id="samples"></div>
+<label id="drop"><input id="file" type="file" accept="image/*" hidden><span style="font-size:16px">Drop a fundus photo here or <b>click to choose</b></span></label>
+<div id="loader" hidden><div class="bar"><div id="loadbar"></div></div><div id="loadlabel"></div></div>
+<div class="steps"><div class="step" id="s1">1. Find optic disc</div><div class="step" id="s2">2. Disc &amp; cup</div><div class="step" id="s3">3. Rim &amp; PPA</div><div class="step" id="s4">4. CNN + heat map</div><div class="step" id="s5">5. Decision &amp; quality</div></div>
+<div id="status"></div>
+</div>
+<div id="out" hidden>
+<div class="grid">
+ <div class="card"><h3>Input photo</h3><img id="orig" alt="Input fundus photograph"></div>
+ <div class="card"><h3>Result</h3><p id="verdict"></p><div id="prob"></div>
+  <div class="pbar"><div id="pbar"></div><i id="thr"></i></div><div class="muted" id="thrlab"></div>
+  <p id="qual"></p><p id="rule" style="font-size:14px"></p><p id="ref" class="muted"></p></div>
+ <div class="card"><h3>Disc, cup and atrophy found</h3><img id="ov" alt="Detected outlines">
+  <div class="legend"><span style="background:#00ffff"></span>disc<span style="background:#ff00ff"></span>cup<span style="background:#ff2828"></span>PPA</div><div id="ppanote" class="muted"></div></div>
+ <div class="card"><h3>Where the network looked</h3><img id="gc" alt="Class activation map"><div class="muted" style="margin-top:6px">Red = regions that drove the glaucoma score.</div></div>
+ <div class="card"><h3>Measurements</h3><table id="meas"></table></div>
+ <div class="card"><h3>Neuroretinal rim (ISNT)</h3><table id="rim"></table><div class="muted" style="margin-top:6px">Healthy eyes usually follow Inferior &ge; Superior &ge; Nasal &ge; Temporal.</div></div>
+</div></div>
+</section>
+<section id="how">
+<h2>How it works</h2>
+<div class="how">
+<div><b>1. Localise</b>U-Net (ResNet-34) marks the optic disc on the whole photo.</div>
+<div><b>2. Segment</b>U-Net outlines disc and cup on a 3&times; crop; a U-Net++ refines the cup on a tight 1.5&times; crop.</div>
+<div><b>3. Measure</b>Vertical, horizontal and area cup-to-disc ratio; rim width in 360 directions (ISNT).</div>
+<div><b>4. Atrophy</b>PPA segmentation trained on PALM, plus a ring CNN that reads the band around the disc.</div>
+<div><b>5. Decide</b>ResNet-50 on the disc region fused with CDR and rim by a calibrated logistic model.</div>
+<div><b>6. Check</b>Heat map of the decision and an uncertainty-based image-quality warning.</div>
+</div>
+</section>
+<section id="results">
+<h2>Key results</h2>
+<div class="figs">
+<figure><img src="assets/fig_classical_vs_dl.png" alt="Classical vs deep learning"><figcaption>Classical image-processing pipeline vs this system on the same 522 test photos.</figcaption></figure>
+<figure><img src="assets/fig_roc.png" alt="ROC curves"><figcaption>Glaucoma detection on 411 clinically labelled test eyes.</figcaption></figure>
+<figure><img src="assets/fig_expert_ceiling.png" alt="Comparison with ophthalmologists"><figcaption>Accuracy on the base paper's task compared with each of six ophthalmologists.</figcaption></figure>
+<figure><img src="assets/fig_robustness.png" alt="Robustness"><figcaption>Behaviour under blur, illumination change, compression, low resolution and noise.</figcaption></figure>
+</div>
+</section>
+</main>
+<footer>Madhur Kumar Rana &middot; MNNIT Allahabad &middot; Research prototype, not a medical device: any finding must be confirmed by an ophthalmologist. Sample photos come from the public Ch&aacute;k&#7779;u, PAPILA and RIGA datasets.</footer>
+<script src="vendor/ort.wasm.min.js"></script>
+<script src="app.js"></script>
+<script>
+let SAMPLES=[];
+function steps(k){for(let i=1;i<=5;i++)$("s"+i).className="step"+(i<k?" done":i===k?" run":"")}
+const f3=v=>v==null||!isFinite(v)?"–":Number(v).toFixed(3);const row=(k,v)=>`<tr><td>${k}</td><td>${v}</td></tr>`;
+async function go(blob,meta){
+  $("out").hidden=true;$("status").textContent="Loading models…";steps(0);
+  try{await Glaucoma.loadModels();const url=URL.createObjectURL(blob);const img=new Image();img.src=url;await img.decode();$("orig").src=url;
+    $("status").textContent="Analysing…";const {r,overlay,heat}=await Glaucoma.analyse(img,(k,t)=>{steps(k);$("status").textContent=t+"…"});
+    steps(6);$("out").hidden=false;$("ref").textContent=meta?`Reference for this sample: ${meta.reference}${meta.expert_vcdr!=null?" · doctors' vertical CDR "+meta.expert_vcdr.toFixed(3):""} (${meta.dataset}).`:"";
+    if(r.warning){$("verdict").textContent=r.warning;$("verdict").style.color="var(--warn)";["prob","thrlab","qual","rule"].forEach(i=>$(i).textContent="");$("pbar").style.width="0";$("ov").removeAttribute("src");$("gc").removeAttribute("src");$("meas").innerHTML="";$("rim").innerHTML="";$("status").textContent="Done";return}
+    $("verdict").textContent=r.refer?"Refer: glaucoma suspected":"No glaucoma signs detected";$("verdict").style.color=r.refer?"var(--bad)":"var(--good)";
+    $("prob").textContent=`Glaucoma probability ${(100*r.probability).toFixed(1)}%`;$("pbar").style.width=100*r.probability+"%";$("pbar").style.background=r.refer?"var(--bad)":"var(--good)";
+    $("thr").style.left=100*r.threshold+"%";$("thrlab").textContent=`Referral threshold ${(100*r.threshold).toFixed(1)}% (chosen on validation data to favour sensitivity)`;
+    $("qual").innerHTML=r.quality_warning?`<span class="warn">&#9888; Image quality: ${r.quality_warning}. Consider retaking the photo.</span>`:"Image quality: OK";
+    $("rule").innerHTML=`Base paper's rule (area CDR &gt; 0.25): <b>${r.paper_rule?"glaucoma":"normal"}</b>`;
+    $("ov").src=overlay;$("gc").src=heat;$("ppanote").textContent=r.PPA_outline.startsWith("no")?"No atrophy region outlined in this eye; see the ring score under Measurements.":"";
+    $("meas").innerHTML=row("Vertical CDR",f3(r.vCDR))+row("Horizontal CDR",f3(r.hCDR))+row("Area CDR",f3(r.area_CDR))+row("Soft area CDR",f3(r.soft_area_CDR))+row("PPA area / disc area",f3(r.PPA_to_disc_area))
+      +row("Peripapillary ring score",`${f3(r.ring_score)} (${r.ring_score>=0.631?"suggestive":"not suggestive"})`)+row("Disc-finder confidence",f3(r.localiser_confidence))+row("Image size",r.image_size)+row("Time",r.seconds.toFixed(1)+" s");
+    $("rim").innerHTML=row("Inferior",f3(r.rim_I))+row("Superior",f3(r.rim_S))+row("Nasal",f3(r.rim_N))+row("Temporal",f3(r.rim_T))+row("Thinnest rim",f3(r.rim_min))+row("ISNT rule followed",r.isnt==null?"–":r.isnt?"yes":"no");
+    $("status").textContent="Done";window.LAST=r;$("out").scrollIntoView({behavior:"smooth",block:"start"});
+  }catch(e){console.error(e);$("status").textContent="Could not analyse this image: "+e.message;window.LASTERR=String(e)}
+}
+fetch("samples/samples.json").then(r=>r.json()).then(list=>{SAMPLES=list;$("samples").innerHTML=list.map((s,i)=>`<button data-i="${i}" title="${s.dataset} - ${s.reference}"><img src="samples/thumb_${s.file}" alt="${s.dataset} sample" loading="lazy"><small>${s.file.replace(".jpg","").replace("__"," ")} · ${s.dataset}</small></button>`).join("");
+  $("samples").querySelectorAll("button").forEach(b=>b.onclick=async()=>{const s=SAMPLES[+b.dataset.i];go(await (await fetch("samples/"+s.file)).blob(),s)})});
+const drop=$("drop");["dragenter","dragover"].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.add("hover")}));
+["dragleave","drop"].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.remove("hover")}));
+drop.addEventListener("drop",ev=>{if(ev.dataTransfer.files[0])go(ev.dataTransfer.files[0])});$("file").addEventListener("change",ev=>{if(ev.target.files[0])go(ev.target.files[0])});
+</script>
+</body>
+</html>
